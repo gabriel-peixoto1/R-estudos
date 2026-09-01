@@ -1,0 +1,40 @@
+Título: Aula 14.08 
+
+Criando um vetor numérico: 
+
+(um vetor é um 'objeto' muito importante no R, que pode ter diversas classes diferentes, como numérico ou lógico.)
+
+```{r}
+idade = c(20,21,22)
+sexo("M","F","M")
+```
+
+
+Criando uma matriz: 
+
+(uma matriz é um conjunto de vetores de mesma classe)
+
+```{r}
+
+```
+
+
+Criando um dataframe: 
+
+(um dataframe é parecido com uma matriz, no sentido de unir e organizar vetores, mas ele pode conter vários objetos de diferentes classes. Uma coluna
+pode ser de valores lógicos, outra de strings e outra numérica.)
+
+```{r}
+
+```
+
+Fator: 
+
+- Internamente, essa função "factor" associa os elementos que compõem esse vetor de variáveis qualitativas à variáveis numéricas. Facilita trabalhar
+com vetores de elementos lógicos ou de texto. 
+- Parecido com "strtok" do C. 
+
+```{r}
+sexo = factor(sexo)
+```
+

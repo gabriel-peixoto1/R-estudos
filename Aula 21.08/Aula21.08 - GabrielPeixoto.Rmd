@@ -1,0 +1,515 @@
+---
+title: "Aula 14.08"
+author: "Gabriel Peixoto"
+date: "2026-08-21"
+output: html_document
+---
+Criando um dataframe 'alunos':
+
+```{r}
+alunos <- data.frame(
+  id = 1:10,
+  curso = c("Civil","Civil","Producao","Civil","Producao","Producao","Civil","Ambiental","Ambiental","Civil"),
+  periodo = c(3,5,2,3,4,6,5,2,4,7)
+    )
+alunos
+```
+função unique() para descobrir os cursos.
+
+- para descobrir quais elementos de cada coluna aparecem.
+
+```{r}
+unique(alunos$curso)
+```
+função unique() para descobrir quais períodos aparecem.
+
+```{r}
+unique(alunos$periodo)
+```
+função unique() ao dataframe inteiro:
+
+- nesse caso, o R retorna apenas as combinações distintas entre curso e período. 
+
+```{r}
+unique(alunos[c("curso","periodo")])
+```
+=============== # =========================== # ====================
+
+ATIVIDADE 01 
+
+Pegando o conjunto de dados 'CO2'. (Já vem instalado no R):
+```{r}
+data(CO2)
+View(CO2)
+head(CO2)
+```
+Verificando as plantas existentes:
+
+```{r}
+unique(CO2$Plant)
+
+```
+Verificando os tipos das plantas:
+
+```{r}
+unique(CO2$Type)
+```
+Combinações únicas entre as quatro primeiras colunas:
+```{r}
+unique(CO2[c("Plant","Type","Treatment","conc")])
+```
+Criando um novo data.frame:
+
+```{r}
+data1 = data.frame(
+  Plant = CO2$Plant,
+  Type = CO2$Type,
+  Treatment = CO2$Treatment,
+  conc = CO2$conc)
+
+## para citar uma coluna específica do dataframe, data$coluna.
+
+data1
+```
+Explicação: 
+
+Quando buscamos encontrar quais tipos de dados aparecem em um data.frame muito extenso. 
+
+
+=================== # ========================== # ================
+
+Parte 2 - função merge()
+
+Como o nome sugere, a função merge é usada para unir dois data.frames, a partir de uma ou mais variáveis em comum. 
+
+Criando dois datas:
+```{r}
+alunos <- data.frame(
+  id = c(1,2,3,4,5),
+  nomes = c("Gabriel","Cecília","Laura","Marcos","Milena"),
+  curso = c("Mecanica","Ambiental","Quimica","Civil","Ambiental")
+)
+
+notas <- data.frame(
+  id = c(1,2,3,4,5),
+  nota = c(10.0,6.0,6.5,7.0,4.0)
+)
+```
+
+usando a merge() para unir os dois datas, com o uso da variável em comum 'id'.
+
+```{r}
+merge(alunos,notas,by="id")
+
+```
+No caso da coluna ser igual, mas ter nomes diferentes nos dois:
+
+```{r}
+notas2 <- data.frame(
+  codigo = c(1,2,3,4,5),
+  nota = c(10.0,6.0,6.5,7.0,4.0)
+)
+
+merge(alunos,notas2,by.x = "id",by.y = "codigo")
+
+```
+Obs.: No caso das duas colunas não serem 100% correspondentes, o merge() irá retornar apenas os valores que forem comuns às duas. 
+Ou, usando o comando 'all.x = TRUE' no final, ele mantém mesmo essas colocando NA nos valores faltantes. 
+
+================ # ============================= # ================
+
+ATIVIDADE 2
+
+Criando os objetos: 
+```{r}
+alunos <- data.frame(
+  id = 1:8,
+  curso = c("Civil", "Civil", "Producao", "Civil","Ambiental", "Producao", "Civil", "Ambiental")
+)
+
+desempenho <- data.frame(
+  id = c(1, 2, 3, 4, 6, 7),
+  media = c(7.2, 8.1, 6.8, 9.0, 7.5, 8.7)
+)
+```
+
+Combinando as duas com 'id': 
+
+```{r}
+merge(alunos,desempenho,by = "id")
+```
+Resp.: 6 alunos possuem informações de desempenho.
+
+Utilizando all.x = TRUE: 
+
+```{r}
+merge(alunos,desempenho,by = "id",all.x = TRUE)
+```
+Os alunos '5' e '8' não possuem informações de desempenho.
+O segundo resultado é mais completo, explicitando essa informação.
+
+
+================== # ========================== # =================
+
+Parte 3 - A função aggregate()
+
+A função agreggate() permite calcular estatísticas resumidas para diferentes grupos. 
+É útil, por exemplo, para calcular estatísticas por grupo, como médias, somas, mínimos e máximos, etc.
+
+```{r}
+dados <- data.frame(
+  curso = c("Civil", "Civil", "Civil",
+            "Producao", "Producao", "Producao",
+            "Ambiental", "Ambiental", "Ambiental"),
+  nota = c(7, 8, 9, 6, 7, 8, 8, 9, 10)
+)
+dados
+```
+
+Calculando a média por curso com aggregate(): 
+
+```{r}
+aggregate(nota ~ curso,data = dados, FUN = mean)
+```
+Calculando a soma das notas: 
+
+```{r}
+aggregate(nota ~ curso, data = dados, FUN = sum)
+```
+Desvio padrão:
+
+```{r}
+aggregate(nota ~ curso, data = dados, FUN = sd)
+```
+máximo:
+
+```{r}
+aggregate(nota ~ curso, data = dados, FUN = max)
+```
+Mais de uma variável por agrupamento
+
+Criando um novo data:
+
+```{r}
+dados <- data.frame(
+  curso = c("Civil", "Civil", "Civil", "Civil",
+            "Producao", "Producao", "Producao", "Producao"),
+  sexo = c("F", "M", "F", "M", "F", "M", "F", "M"),
+  nota = c(7, 8, 9, 6, 6, 7, 8, 9)
+)
+```
+Calculando a média por curso e sexo: 
+
+```{r}
+aggregate(nota ~ curso + sexo, data = dados, FUN = mean)
+```
+================= # ============================== # ==============
+
+ATIVIDADE 3
+
+Criando um novo data:
+
+```{r}
+engenharia <- data.frame(
+  curso = c("Civil", "Civil", "Civil", "Civil",
+            "Producao", "Producao", "Producao", "Producao",
+            "Ambiental", "Ambiental", "Ambiental", "Ambiental"),
+  turno = c("Diurno", "Noturno", "Diurno", "Noturno",
+            "Diurno", "Noturno", "Diurno", "Noturno",
+            "Diurno", "Noturno", "Diurno", "Noturno"),
+  nota = c(7.0, 6.5, 8.0, 7.5,
+           6.0, 7.0, 8.5, 7.5,
+           8.0, 9.0, 7.5, 8.5)
+)
+
+engenharia
+```
+Média por curso:
+
+```{r}
+aggregate(nota~curso,data=engenharia,FUN=mean)
+```
+Média por turno:
+
+```{r}
+aggregate(nota~turno,data=engenharia,FUN=mean)
+```
+Média por curso e turno: 
+
+```{r}
+aggregate(nota~curso+turno,data=engenharia,FUN=mean)
+```
+Maior nota em cada curso:
+
+```{r}
+aggregate(nota~curso,data=engenharia,FUN=max)
+```
+Desvio padrão de nota por curso:
+
+```{r}
+aggregate(nota~curso,data=engenharia,FUN=sd)
+```
+
+==================== # ========================= # ================
+
+ATIVIDADE 4 
+
+Analisando o arquivo CO2:
+```{r}
+head(CO2)
+```
+Soma dos valores de uptake por tratamento:
+
+```{r}
+aggregate(uptake~Treatment,data=CO2,FUN=sum)
+```
+Média dos valores de uptake por concentração:
+
+```{r}
+aggregate(uptake~conc,data=CO2,FUN=mean)
+```
+Média dos valores de uptake por todas as outras variáveis.
+
+```{r}
+aggregate(uptake~Plant+Type+Treatment+conc,data=CO2,FUN=mean)
+```
+===================== # ======================== # ================
+
+Formatos Wide e Long
+
+Criando um data wide (padrão):
+```{r}
+notas_wide <- data.frame(
+  aluno = c(1, 2, 3),
+  prova1 = c(7, 8, 6),
+  prova2 = c(8, 9, 7),
+  prova3 = c(9, 8, 8)
+)
+notas_wide
+```
+Transformando wide em long:
+
+Baixar o tidyr.
+
+```{r}
+library(tidyr)
+notas_long <- pivot_longer(
+  notas_wide,
+  cols = c(prova1,prova2,prova3),
+  names_to = "prova",
+  values_to = "nota"
+)
+
+## também daria para indicar as colunas pela posição. Nesse caso, colunas de 2:4. 
+
+notas_long
+```
+================ # ========================= # ====================
+
+ATIVIDADE 5
+
+Transformando notas_wide em notas_long.
+
+```{r}
+notas_long <- pivot_longer(
+  notas_wide,
+  cols = c(prova1,prova2,prova3),
+  names_to = "prova",
+  values_to = "nota"
+)
+
+notas_long
+```
+A variável 'aluno' indica os alunos.
+A variável 'prova' contém o tipo de prova.
+A variável 'nota' contém o valor de cada nota. 
+As linhas aumentam, porque resumimos valores que estavam cada em um em uma coluna, para diversas linhas diferentes. 
+
+==================== # =========================== # ==============
+
+APLICAÇÃO INTEGRADA 7
+
+```{r}
+concreto <- data.frame(
+  corpo = 1:6,
+  resistencia_7 = c(18, 21, 20, 19, 22, 21),
+  resistencia_28 = c(25, 28, 27, 26, 29, 28),
+  resistencia_56 = c(27, 30, 29, 28, 31, 30)
+)
+concreto
+```
+transformar os dados para long:
+
+```{r}
+concreto_long <- pivot_longer(
+  concreto,
+  cols = c(resistencia_7,resistencia_28,resistencia_56),
+  names_to = "idade",
+  values_to = "resistencia"
+)
+concreto_long
+```
+retirando a palavra "resistencia" da variável idade usando sub().
+
+```{r}
+concreto_long$idade = sub(
+  "resistencia_",
+  "",
+  concreto_long$idade
+)
+
+concreto_long
+```
+Calculando a resistência média por idade
+
+```{r}
+aggregate(resistencia~idade, data=concreto_long,FUN=mean)
+```
+desvio padrão por idade:
+
+```{r}
+aggregate(resistencia~idade, data=concreto_long,FUN=mean)
+```
+Retornando ao formato wide:
+
+```{r}
+concreto_wide <- pivot_wider(
+  concreto_long,
+  names_from = idade,
+  values_from = resistencia
+)
+
+concreto_wide
+```
+================== # ========================= # =============
+
+ATIVIDADE INTEGRADA 08
+
+Analisando novamente os dados da resistência de três tipos de concreto (diferenciados por idade) em relação a resistência.
+
+```{r}
+materiais <- data.frame(
+  id = 1:8,
+  tipo = c("C20","C20", "C20", "C25",
+    "C25", "C25", "C30", "C30"
+  ),
+  resistencia_7 = c(
+    15, 16, 17, 18, 19, 20, 22, 23
+  ),
+  resistencia_28 = c(
+    21, 22, 23, 25, 26, 27, 29, 31
+  ),
+  resistencia_56 = c(
+    23, 24, 25, 27, 28, 29, 32, 34
+  )
+)
+
+materiais
+
+
+```
+usando unique() para identificar os tipos de concreto:
+
+```{r}
+unique(materiais$tipo)
+```
+Transformação para long:
+
+```{r}
+materiais_long = pivot_longer(
+  materiais,
+  cols = c("resistencia_7","resistencia_28","resistencia_56"),
+  names_to = "idade",
+  values_to = "resistencia"
+)
+
+materiais_long
+```
+aggregate() para calcular estatísticas
+
+resistÊncia média por idade:
+```{r}
+aggregate(resistencia~idade,data=materiais_long,FUN=mean)
+```
+
+resistÊncia média por tipo de concreto:
+```{r}
+aggregate(resistencia~tipo,data=materiais_long,FUN=mean)
+```
+
+resistência média por tipo e idade:
+```{r}
+aggregate(resistencia~tipo+idade,data=materiais_long,FUN=mean)
+```
+desvio-padrão por tipo e idade:
+
+```{r}
+aggregate(resistencia~tipo+idade,data=materiais_long,FUN=sd)
+```
+
+================= # =========================== # =================
+
+ATIVIDADE INTEGRADA 9
+
+Crie um segundo data.frame contendo informações adicionais sobre os corpos de prova:
+
+```{r}
+caracteristicas <- data.frame(
+  id = 1:8,
+  slump = c(8, 7, 9, 8, 10, 9, 7, 8),
+  agregado = c(
+    "Brita1", "Brita1", "Brita2", "Brita2",
+    "Brita1", "Brita2", "Brita2", "Brita1"
+  )
+)
+caracteristicas
+```
+utilizando merge() para combinar materiais e características.
+
+```{r}
+materiais_completo <- merge(
+  materiais,
+  caracteristicas,
+  by='id'
+)
+materiais_completo
+```
+Resistência média aos 28 dias por tipo de agregado:
+
+```{r}
+aggregate(resistencia_28~agregado,data=materiais_completo,FUN=mean)
+```
+Resistência média aos 28 dias por tipo de concreto:
+
+```{r}
+aggregate(resistencia_28~tipo,data=materiais_completo,FUN=mean)
+```
+Resistência média aos 28 dias por tipo de concreto e agregado:
+
+```{r}
+aggregate(resistencia_28~tipo+agregado,data=materiais_completo,FUN=mean)
+```
+Média entre 7, 28 e 56 dias:
+```{r}
+
+```
+
+================== # ============================== # =============
+
+10 - QUESTÕES DE INTERPRETAÇÃO
+
+1 - O concreto C30 apresentou maior resistÊncia aos 28 dias.
+2 - 
+
+
+
+
+
+
+
+
+
+
+
+
+

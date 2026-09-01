@@ -4,4 +4,13 @@ title: "teste 01"
 ```{r}
 print("teste 1")
 ```
+```{r}
+getwd()
+```
+
+
+```{r}
+list.files()
+```
+
 

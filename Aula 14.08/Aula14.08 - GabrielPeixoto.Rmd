@@ -1,0 +1,508 @@
+---
+title: "titulo.sei.la"
+author: "Gabriel Peixoto"
+date: "2026-08-14"
+output: pdf_document
+---
+
+```{r}
+notas = c(19, 20, 25, 23,  29)
+notas
+```
+```{r}
+nomes = c("Bruno", "Luara", "Caio","Maria", "Rita")
+nomes
+```
+Os vetores que desejamos associar sempre devem ser do mesmo tamanho, portanto, se não houver algum valor correspondente em um dos vetores, 
+costumamos caracterizá-los como "NA". 
+
+```{r}
+nomes = c(nomes, "Pedro")   # o novo vetor vai englobar o antigo vetor nomes e o novo nome "Pedro".
+notasE = c(notas, NA)  
+nomes
+notasE
+```
+=================== # =========================== # ===============
+
+Usando a função 'seq' para criar sequÊncias.
+seq(início,fim,passo)
+```{r}
+seq_a = seq(1,20,1)
+seq_a
+```
+```{r}
+notass = c(57,58,59,60,61,62)
+```
+
+```{r}
+seq_b = seq(20,1)
+seq_b
+```
+
+```{r}
+seq_c = seq(0,50,5)
+seq_c
+```
+
+```{r}
+seq_d = seq(0,50,2.5)
+seq_d
+```
+repetindo cada valor da sequÊncia com 'rep' e 'each': 
+```{r}
+seq_e <- rep(c(2,3,4,5,6),each = 3)
+seq_e
+
+```
+criando uma sequência que se repete 5 vezes. 
+```{r}
+
+seq_f <- rep(c(2,3,4), times = 5)
+seq_f
+
+```
+criando uma sequência com os elementos aluno1, aluno2, aluno3... 
+
+```{r}
+seq_g = paste(c("aluno"),1:4,sep="")
+seq_g
+```
+================= # ======================== # ====================
+
+VETOR LÓGICO - criação: 
+
+```{r}
+notasA = c(59,60,61,65,70,98,100,NA)
+aprovado = notasA >= 60
+aprovado
+notasB = c(59,65,70,45,86,NA,100,55)
+```
+Avaliando condições. 
+a) Nota menor que 80 nas duas disciplinas (A e B):
+
+```{r}
+notasA < 80 & notasB < 80
+```
+b) Nota menor do que 80 em pelo menos uma das disciplinas.
+
+```{r}
+notasA < 80 | notasB < 80
+```
+a função "is.na()" detecta elementos NA e retorna eles como True. 
+
+```{r}
+is.na(notasA)
+```
+A negação dela, "!is.na()" detecta elementos não-vazios. 
+
+```{r}
+!is.na(notasB)
+```
+Pulei a parte de 'operações' entre vetores e variáveis.
+
+================= # ========================== # ==================
+
+VETORES
+
+```{r}
+nomes
+notass
+```
+Percorrendo elementos de um vetor, usando colchetes:
+
+```{r}
+nomes[1]
+```
+Percorrendo elementos de um vetor, por intervalo: 
+
+```{r}
+nomes[1:3]
+```
+Selecionando elementos específicos de um vetor: 
+
+```{r}
+notass[c(2,4,6,8)]
+## printei só as notas nas posições 2,4,6 e 8.
+```
+Filtrando vetores por condição lógica:
+
+```{r}
+notasAcima = notass[notass>60]
+notasAcima
+```
+```{r}
+notass[nomes == "Maria"]
+## procurando a nota específica por nome. 
+## o vetor procura a posição em 'nomes' do elemnto "Maria" e depois associa essa posição para o 'notass'. 
+```
+Modificando um elemento do vetor: 
+
+```{r}
+notass[3] = 80
+notass
+```
+===================== # ========================== # ==============
+
+Propriedades de Vetores
+
+```{r}
+str(nomes)
+```
+```{r}
+str(aprovado)
+```
+
+```{r}
+length(notass)
+```
+Para encontrar valores mínimos e máximos de vetores: 
+
+```{r}
+min(notass)
+```
+```{r}
+max(notass)
+```
+Soma e Produto entre elementos de vetor: 
+```{r}
+sum(notass)
+```
+
+
+```{r}
+prod(notass)
+```
+Para colocar valores em ordem Crescente ou Decrescente:
+
+```{r}
+sort(notas,decreasing = FALSE)
+```
+
+```{r}
+sort(notas,decreasing = TRUE)
+```
+================ # =========================== # ===============
+"Conhecendo melhor um objeto" 
+
+Criando um vetor qualquer: 
+
+```{r}
+v1 = c(1,2,3,4,5,6,7,8,9)
+```
+
+
+```{r}
+class(v1)
+```
+```{r}
+typeof(v1)
+```
+```{r}
+str(v1)
+## obs.: str aqui significa 'structure' do objeto, não string.
+```
+=================== # ================================ # ========
+
+NOMES DOS ELEMENTOS 
+
+```{r}
+dinheiro = c(1,2,3,4,5,6)
+dinheiro = dinheiro * 1000
+dinheiro
+```
+Usando a função 'names' para nomear cada elemento desse vetor.
+
+```{r}
+names(dinheiro) = c("pobre","mtPobre","OK","bemDeVida","Rico","Milionário")
+names(dinheiro)
+```
+================== # =========================== # ================
+
+Dimensão e Atributos (de matrizes)
+
+```{r}
+m1 = matrix(1:6,nrow = 2)
+m1
+```
+
+Dimensões: 
+
+```{r}
+dim(m1)
+## 2 linhas e 3 colunas.
+```
+```{r}
+nrow(m1)       ##número de linhas m1
+ncol(m1)       ##número de colunas m1
+```
+=========== # ====================== # ========================
+
+ATIVIDADE 1: 
+
+```{r}
+a = c(12, 15, 18, 20)
+b = c("A", "B", "C", "D")
+c = c(TRUE, FALSE, TRUE, TRUE)
+d = matrix(1:8, nrow = 4)
+```
+
+classes: 
+
+```{r}
+class(a)
+class(b)
+class(c)
+class(d)
+```
+tipos:
+
+```{r}
+typeof(a)
+typeof(b)
+typeof(c)
+typeof(d)
+```
+length:
+
+```{r}
+length(a)
+length(b)
+length(c)
+length(d)
+```
+structure:
+
+```{r}
+str(a)
+str(b)
+str(c)
+str(d)
+```
+attributes:
+
+```{r}
+attributes(a)
+attributes(b)
+attributes(c)
+attributes(d)
+```
+As dimensões de uma matriz informam o número de linhas e número de colunas. No entanto, o length dá a extensão do elemento. No caso das matrizes, dá a quantidade de elementos. 
+
+================ # ========================= # ===================
+
+
+ATIVIDADE 2:
+
+```{r}
+temperatura = c(24.5, 25.1, 26.3, 24.9)
+```
+
+1. 
+```{r}
+names(temperatura) = c("p1","p2","p3","p4")
+```
+
+2. 
+```{r}
+temperatura["p3"]
+```
+3.
+
+```{r}
+temperatura["p2"] = 25.4
+```
+
+4. 
+```{r}
+names(temperatura) = NULL
+```
+
+==================== # ========================= # ================
+
+ATIVIDADE 3: 
+
+```{r}
+medida = c(31.2, 28.7, 35.1, 30.4, 33.8, 29.5)
+```
+1.
+
+```{r}
+length(medida)
+```
+2.
+
+```{r}
+min(medida)
+max(medida)
+```
+3.
+
+```{r}
+mean(medida)
+```
+4.
+
+```{r}
+sort(medida,decreasing = FALSE)
+sort(medida,decreasing = TRUE)
+```
+5.
+
+```{r}
+medida1 = sort(medida,decreasing = TRUE)
+medida1[1:3]
+```
+6.
+
+```{r}
+medida[4] = 31.0
+```
+
+7.
+```{r}
+medida30 = medida[medida>=30]
+medida30
+```
+==================== # ============================ # =============
+
+ATIVIDADE 4
+
+```{r}
+medida2 = c(72, 68, NA, 75, 70, NA, 73)
+```
+
+1. 
+```{r}
+medidaNA = is.na(medida2)
+medidaNA
+```
+2. 
+
+```{r}
+length(medidaNA["TRUE"])
+```
+3.
+
+```{r}
+medidaMEAN = medida2
+mean(medida2)
+```
+4. 
+
+```{r}
+
+```
+
+
+```{r}
+if(mean)
+```
+
+
+```{r}
+```
+
+
+```{r}
+```
+
+
+```{r}
+```
+
+
+```{r}
+```
+
+
+```{r}
+```
+
+
+```{r}
+```
+
+
+```{r}
+```
+
+
+```{r}
+```
+
+
+```{r}
+```
+
+
+```{r}
+```
+
+
+```{r}
+```
+
+
+```{r}
+```
+
+
+```{r}
+```
+
+
+```{r}
+```
+
+
+```{r}
+```
+
+
+```{r}
+```
+
+
+```{r}
+```
+
+
+```{r}
+```
+
+
+```{r}
+```
+
+
+```{r}
+```
+
+
+```{r}
+```
+
+
+```{r}
+```
+
+
+```{r}
+```
+
+
+```{r}
+```
+
+
+```{r}
+```
+
+
+```{r}
+```
+
+
+```{r}
+```
+
