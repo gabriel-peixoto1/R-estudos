@@ -1,0 +1,340 @@
+---
+title: "Aula 04.09 - Conditionals and Loops"
+output: html_notebook
+---
+
+Sintaxe do primeiro If: 
+
+```{r}
+nota <- 72
+
+if(nota >= 60) {
+  print("aprovado")
+}
+```
+Sintaxe do If + Else:
+
+```{r}
+if(nota >= 60) {
+  print("Aprovado")
+} else {
+  print("Reprovado")
+}
+```
+Uso de "else if":
+
+```{r}
+if (nota >= 90)  {
+  conceito <- "A"
+} else if (nota >= 80) {
+  conceito <- "B"
+} else if (nota >= 70) {
+  conceito <- "C"
+} else {
+  conceito <- "F"
+}
+
+print(conceito)
+```
+Uso de "ifelse":
+Enquanto if avalia objetos elementares, ifelse é uma função aplicada à vetores. Ele avalia a condição para cada elemento do vetor e retorna outro vetor de mesmo comprimento com os resultados. 
+
+```{r}
+notas<-c(56,80,60)
+frequencia=c("suficiente","suficiente","insuficiente")
+resultado=ifelse(notas>=60 & frequencia=="suficiente","aprovado", ifelse(nota>=60 & frequencia=="insuficiente","reprovado por frequencia",ifelse(nota<60 & frequencia=="suficiente","reprovado por nota","reprovado por nota e frequência")))
+
+# cada ifelse precisa de um resultado para sim e outro para não. 
+
+print(resultado)
+```
+Criando uma função para classificar o risco de crédito de clientes
+
+```{r}
+avaliar_credito <- function(score, renda, divida_ativa) {
+  
+# Análise da presença de dívida ativa"
+  
+    if (divida_ativa == "Sim") {
+    return("Crédito Negado - Dívida Ativa")
+    }
+  
+# Análise combinada de Score e Renda
+  
+    if (score >= 750) {
+    return("Crédito Aprovado - Linha Premium")
+    } else if (score >= 500 & renda >= 3000) {
+    return("Crédito Aprovado - Linha Standard")
+    } else if (score >= 500 & renda < 3000) {
+    return("Crédito Aprovado com fiador")
+    } else {
+    return("Crédito Negado")
+  }
+}
+
+# Testando a função com um cliente específico
+avaliar_credito(score = 620, renda = 2500, divida_ativa = FALSE)
+```
+Função de média móvel com laço de repetição:
+
+```{r}
+media_movel = function(x) {
+  n <- length(x)
+  mm = numeric(n-2)
+  for(i in 3:n) {
+    mm[i-2] = mean(x[(i-2):i])
+  }
+  
+  grafico = plot(1:n,x,xlab="dias",ylab="medição",type = "b",pch=1,cex.lab=1,ylim=c(-2,3))
+  lines(2:(n-1),mm,col=2,type="b",lty=2,pch=16)
+legend("topright",col=c(1,2),pch=c(1,16),legend=c("medição","Media Movel"),cex=0.7,horiz=TRUE,bty="n")
+# resutados fornecidos pela função
+return(list(mediasm=mm,grafico=grafico))
+}
+}
+```
+
+=============== # ========================= # ============
+
+Atividade 01 (for):
+
+```{r}
+retornos_ibov <- c(0.12, -1.45, 0.88, -0.23,1.15, -0.92, -1.84, 2.05, 0.34, -0.76, 1.42,-1.18,0.05, 0.91, -2.11, 0.67, 1.23, -0.45, -0.89, 0.54,1.98, -1.32, -0.11, 0.76, -0.98, 0.43,-1.67,2.21,-0.54, 0.12, -0.87, 1.09, -1.24, 0.34, 0.95, -2.43,1.76, -0.08, -0.65, 1.12, -1.54, 0.89, 0.23,-0.43,1.34, -1.98, 0.56, 0.11, -0.78, 1.21)
+
+media_movel(retornos_ibov)
+```
+Atividade 02: 
+
+```{r}
+media_movel_tam = function(x,tamanho) {
+  n <- length(x)
+  qtd_medias_moveis <- (n - tamanho + 1)
+  mm = numeric(n - tamanho + 1)
+  for(i in 3:n) {
+    mm[i-tamanho+1] = mean(x[(i-tamanho+1:i)])
+  }
+  
+  a = mean(1-tamanho)
+  b = n - a - 1 
+  grafico = plot(1:n,x,xlab="dias",ylab="medição",type = "b",pch=1,cex.lab=1,ylim=c(-2,3))
+  lines(2:(n-1),mm,col=2,type="b",lty=2,pch=16)
+  legend("topright",col=c(1,2),pch=c(1,16),legend=c("medição","Media Movel"),cex=0.7,horiz=TRUE,bty="n")
+# resutados fornecidos pela função
+return(list(mediasm=mm,grafico=grafico))
+}
+
+
+## n - tamanho + 1
+
+```
+
+Atividade 03:
+
+```{r}
+
+```
+
+=============== # ========================= # ============
+
+WHILE
+
+Exemplo 01:
+
+```{r}
+
+media_movelW=function(x){      # cria a funçao 
+n<- length(x)                  # calcula o comprimento de x
+mm=numeric(n-2)                # cria um vetor de zeros de tamanho n-2                                 # para armazenar as médias moveis
+i=3 #inicia o contador
+while (i<=n) {
+  mm[i-2]=mean(x[(i-2):i])    #calcula media movel e atualiza mm
+  i=i+1                       #atualiza o contador
+}
+# construção do grafico
+grafico=plot(1:n,x,xlab="dias",ylab="medição",type="b",pch=1,cex.lab=1,ylim=c(-2,3))
+lines(2:(n-1),mm,col=2,type="b",lty=2,pch=16)
+legend("topright",col=c(1,2),pch=c(1,16),legend=c("medição","Media Movel"),cex=0.7,horiz=TRUE,bty="n")
+# define resultados da função
+return(list(mediasm=mm,grafico=grafico))
+}
+
+```
+
+Exemplo 02:
+
+```{r}
+# Parâmetros iniciais do problema
+x_atual <- 10           # Ponto de partida inicial
+taxa_aprendizado <- 0.1 # Alpha (tamanho do passo)
+tolerancia <- 0.0001    # Critério de convergência (Epsilon)
+max_iter <- 1000        # Limite de segurança contra loops infinitos
+
+# Variáveis de controle do laço
+diferenca <- Inf     # Inicializa a diferença como "infinita"
+iteracao <- 0        # Contador de passos
+
+# 3. Laço while para avaliar a convergência
+while (diferenca > tolerancia && iteracao < max_iter) {
+# Calcula o gradiente no ponto atual (Derivada de x^2 é 2x)
+  gradiente <- 2 * x_atual
+# Aplica a regra de atualização
+  x_novo <- x_atual - taxa_aprendizado * gradiente
+  
+# Calcula a distância percorrida neste passo (Critério de Convergência)
+  diferenca <- abs(x_novo - x_atual)
+  
+# Atualiza as variáveis para a próxima iteração
+  x_atual <- x_novo
+  iteracao <- iteracao + 1
+}
+
+# 4. Exibição dos resultados
+cat("--- Resultado da Otimização ---\n",
+"Ponto mínimo encontrado (x):", round(x_atual, 5), "\n",
+"Número de iterações para convergir:", iteracao, "\n")
+
+```
+
+Atividade 01: 
+
+```{r}
+otimizacao <- function(x_atual,taxa_aprendizado,tolerancia) {
+max_iter <- 1000        # Limite de segurança contra loops infinitos
+
+# Variáveis de controle do laço
+diferenca <- Inf     # Inicializa a diferença como "infinita"
+
+# 3. Laço while para avaliar a convergência
+while (diferenca > tolerancia && iteracao < max_iter) {
+# Calcula o gradiente no ponto atual (Derivada de x^2 é 2x)
+  gradiente <- 2 * x_atual
+# Aplica a regra de atualização
+  x_novo <- x_atual - taxa_aprendizado * gradiente
+  
+# Calcula a distância percorrida neste passo (Critério de Convergência)
+  diferenca <- abs(x_novo - x_atual)
+  
+# Atualiza as variáveis para a próxima iteração
+  x_atual <- x_novo
+  iteracao <- iteracao + 1
+}
+
+# 4. Exibição dos resultados
+cat("--- Resultado da Otimização ---\n",
+"Ponto mínimo encontrado (x):", round(x_atual, 5), "\n",
+"Número de iterações para convergir:", iteracao, "\n")
+}
+
+otimizacao(10,0.1,0.0001)
+
+```
+Atividade 02:
+
+```{r}
+otimizacao(5,0.1,0.0001)
+```
+Atividade 03:
+
+```{r}
+otimizacao2 <- function(x_atual,taxa_aprendizado,tolerancia) {
+max_iter <- 1000        # Limite de segurança contra loops infinitos
+
+# Variáveis de controle do laço
+diferenca <- Inf     # Inicializa a diferença como "infinita"
+
+# 3. Laço while para avaliar a convergência
+while (diferenca > tolerancia && iteracao < max_iter) {
+# Calcula o gradiente no ponto atual (Derivada de x^2 é 2x)
+  gradiente <- 2 * x_atual - 10
+# Aplica a regra de atualização
+  x_novo <- x_atual - taxa_aprendizado * gradiente
+  
+# Calcula a distância percorrida neste passo (Critério de Convergência)
+  diferenca <- abs(x_novo - x_atual)
+  
+# Atualiza as variáveis para a próxima iteração
+  x_atual <- x_novo
+  iteracao <- iteracao + 1
+}
+
+# 4. Exibição dos resultados
+cat("--- Resultado da Otimização ---\n",
+"Ponto mínimo encontrado (x):", round(x_atual, 5), "\n",
+"Número de iterações para convergir:", iteracao, "\n")
+}
+
+otimizacao2(10,0.1,0.0001)
+
+```
+=============== # ========================= # ============
+
+WHILE
+
+Ativida 01 
+
+Escolha um número qualquer (ex: numero <- 7) e construa um loop for que exiba a tabuada desse número do 1 ao 10 no console, no formato: “7 x 1 = 7”, “7 x 2 = 14”, etc. (Dica: use a função paste() ou cat()).
+
+```{r}
+tabuada <- function(numero) {
+  
+  for (i in 1:10) {
+    cat(numero, "x", i, "=", numero * i, "\n")
+  }
+  
+}
+
+tabuada(7)
+```
+Atividade 02: 
+
+```{r}
+jogar_dado <- function() {
+  
+  repeat {
+    
+    numero <- sample(1:6, 1)
+    print(numero)
+    
+    if (numero == 6) {
+      break
+    }
+    
+  }
+  
+}
+
+jogar_dado()
+```
+Atividade 03: 
+
+```{r}
+jogar_dado_100 <- function() {
+  
+  for (i in 1:100) {
+    
+    numero <- sample(1:6, 1)
+    print(numero)
+    
+    if (numero == 6) {
+      break
+    }
+    
+  }
+  
+}
+
+jogar_dado_100()
+```
+
+
+```{r}
+```
+
+
+```{r}
+```
+
+
+```{r}
+```
+
