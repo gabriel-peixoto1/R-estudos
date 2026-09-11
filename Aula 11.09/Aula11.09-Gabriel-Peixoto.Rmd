@@ -4,3 +4,189 @@ output: html_document
 date: "2026-09-11"
 ---
 
+Um botânico realizou um experimento para analisar o impacto da Dose de Fertilizante (Variável X, em miligramas) na Altura Final da Planta (Variável Y, em centímetros). Ele utilizou 50 mudas divididas em duas espécies com portes e necessidades denotadas por especie 1 e especie 2. As seguir são apresentados os valores de x e y separamente para cada espécie.
+
+x1 <- c(74.9, 98.1, 89.3, 83.9, 66.2, 66.2, 62.3, 94.7, 84.0, 88.3, 60.8, 98.8, 93.3, 68.5, 67.3, 67.3, 72.2, 77.0, 77.3, 71.6, 65.6, 71.7, 89.7, 78.2, 85.6) x2 <- c(27.9, 43.5, 37.8, 31.8, 21.8, 22.1, 22.0, 47.3, 38.2, 40.5, 20.2, 49.6, 44.2, 23.4, 22.8, 22.8, 26.1, 29.5, 29.7, 25.5, 23.2, 25.7, 41.3, 31.9, 37.1) y1 <- c(59.8, 80.6, 74.3, 67.7, 48.4, 56.4, 54.7, 81.3, 66.4, 71.9,43.6, 84.2, 73.0, 50.8, 57.5, 54.4, 59.5, 60.9, 57.0, 55.4, 50.7, 61.3, 64.9, 67.5, 68.0) y2 <- c(24.3, 32.5, 21.0, 26.5, 13.5, 14.5, 21.3, 36.3, 26.6, 31.6, 13.5, 40.9, 34.5, 14.2, 13.0, 13.2, 21.6, 22.1, 15.1, 18.2, 19.4, 18.0, 25.5, 21.6, 26.6)
+
+
+--- 
+
+Gráfico 1:
+
+- Faça o plot de y1 versus x1.
+- Atribua titulo ao gráfico e às variaveis representadas no eixos x1 e y1.
+- Inclua uma grade ao grafico com linhas azuis claras.
+- Acrescente uma linha horizontal passando pela média amostral de y1 e uma linha vertical passando pela média de x1.
+- Acrescente ao gráfico a reta de regressão estimada. Observe que essa reta passa pelo ponto (\mean(x),\mean(y)).
+- Nas margens esquerda e inferior do gráfico escreva y1¯ e x1¯ na posições correspondentes a esses valores.
+- Desenhe no grafico um segmento de reta na cor vermelha unindo os pontos (43.5,80.6) o ponto dados pelas médias de x1 e y1.
+- Inclua no corpo do gráfico ρ= ao valor correspondente da correlação entre y1 e x1 usando bquote. (para escrever a letra ρ use .)
+- Inclua na figura o grafico rugs para as variáveis y1 e x1.
+
+```{r}
+x1 <- c(74.9, 98.1, 89.3, 83.9, 66.2, 66.2, 62.3, 94.7, 84.0, 88.3, 60.8, 98.8, 93.3, 68.5, 67.3, 67.3, 72.2, 77.0, 77.3, 71.6, 65.6, 71.7, 89.7, 78.2, 85.6) 
+
+x2 <- c(27.9, 43.5, 37.8, 31.8, 21.8, 22.1, 22.0, 47.3, 38.2, 40.5, 20.2, 49.6, 44.2, 23.4, 22.8, 22.8, 26.1, 29.5, 29.7, 25.5, 23.2, 25.7, 41.3, 31.9, 37.1)
+
+y1 <- c(59.8, 80.6, 74.3, 67.7, 48.4, 56.4, 54.7, 81.3, 66.4, 71.9,43.6, 84.2, 73.0, 50.8, 57.5, 54.4, 59.5, 60.9, 57.0, 55.4, 50.7, 61.3, 64.9, 67.5, 68.0) 
+
+y2 <- c(24.3, 32.5, 21.0, 26.5, 13.5, 14.5, 21.3, 36.3, 26.6, 31.6, 13.5, 40.9, 34.5, 14.2, 13.0, 13.2, 21.6, 22.1, 15.1, 18.2, 19.4, 18.0, 25.5, 21.6, 26.6)
+
+```
+
+
+
+```{r}
+
+```
+
+
+
+```{r}
+
+# Gráfico de dispersão
+plot(x1, y1,
+     main = "Dose de Fertilizante × Altura Final da Planta",
+     xlab = "Dose de Fertilizante (mg)",
+     ylab = "Altura Final da Planta (cm)",
+     pch = 19)
+
+# Médias
+media_x1 <- mean(x1)
+media_y1 <- mean(y1)
+
+# Correlação
+rho <- cor(x1, y1)
+
+# Modelo de regressão linear
+modelo <- lm(y1 ~ x1)
+
+
+# Grade
+grid(col = "lightblue")
+
+# Linha horizontal na média de y1
+abline(h = media_y1)
+
+# Linha vertical na média de x1
+abline(v = media_x1)
+
+# Reta de regressão
+abline(modelo)
+
+# Rugs
+rug(x1, side = 1)
+rug(y1, side = 2)
+
+# Segmento vermelho entre (43.5, 80.6) e o ponto das médias
+segments(43.5, 80.6,
+         media_x1, media_y1,
+         col = "red",
+         lwd = 2)
+
+# y1 médio na margem esquerda
+text(par("usr")[1], media_y1,
+     labels = expression(bar(y)[1]),
+     pos = 2)
+
+# x1 médio na margem inferior
+text(media_x1, par("usr")[3],
+     labels = expression(bar(x)[1]),
+     pos = 1)
+
+# Correlação dentro do gráfico
+text(65, 82,
+     bquote(rho == .(round(rho, 3))),
+     cex = 1.2)
+
+
+```
+
+
+```{r}
+plot(x1, y1,
+     xlim = range(c(x1, x2)),
+     ylim = range(c(y1, y2)),
+     pch = 16,
+     col = "red",
+     main = "Dose de Fertilizante × Altura Final da Planta",
+     xlab = "Dose de Fertilizante (mg)",
+     ylab = "Altura Final da Planta (cm)")
+
+points(x2, y2,
+       pch = 1,
+       col = "blue")
+
+legend("topleft",
+       legend = c("Espécie 1", "Espécie 2"),
+       col = c("red", "blue"),
+       pch = c(16, 1))
+```
+
+```{r}
+x <- c(x1, x2)
+y <- c(y1, y2)
+
+grupo <- factor(c(rep("Espécie 1", length(x1)),
+                  rep("Espécie 2", length(x2))))
+
+plot(y ~ x,
+     col = grupo,
+     pch = as.numeric(grupo),
+     main = "Dose de Fertilizante × Altura Final da Planta",
+     xlab = "Dose de Fertilizante (mg)",
+     ylab = "Altura Final da Planta (cm)")
+
+legend("topleft",
+       legend = levels(grupo),
+       col = 1:2,
+       pch = 1:2)
+```
+```{r}
+# Histograma de y1
+hist(y1,
+     probability = TRUE,
+     xlim = c(20, 120),
+     ylim = c(0, 0.10),
+     col = "lightgray",
+     main = "Distribuição das alturas das plantas",
+     xlab = "Altura (cm)",
+     ylab = "Densidade")
+
+# Histograma de y2
+hist(y2,
+     probability = TRUE,
+     add = TRUE,
+     col = "lightblue")
+
+# Curva normal de y1
+curve(dnorm(x,
+            mean = mean(y1),
+            sd = sd(y1)),
+      from = 20,
+      to = 120,
+      add = TRUE,
+      col = "red",
+      lwd = 2)
+
+# Curva normal de y2
+curve(dnorm(x,
+            mean = mean(y2),
+            sd = sd(y2)),
+      from = 20,
+      to = 120,
+      add = TRUE,
+      col = "blue",
+      lwd = 2)
+
+# Legenda
+legend("topright",
+       legend = c("Espécie 1", "Espécie 2",
+                  "Normal - Espécie 1", "Normal - Espécie 2"),
+       fill = c("lightgray", "lightblue", NA, NA),
+       border = c("black", "black", NA, NA),
+       col = c(NA, NA, "red", "blue"),
+       lwd = c(NA, NA, 2, 2))
+```
+
+
