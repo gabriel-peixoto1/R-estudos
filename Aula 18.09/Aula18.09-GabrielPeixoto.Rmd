@@ -1,0 +1,273 @@
+---
+title: "Aula 18.09"
+---
+Um botânico realizou um experimento para analisar o impacto da Dose de Fertilizante (Variável dose, em miligramas) na Altura Final da Planta (Variável altura, em centímetros). Ele utilizou 50 mudas divididas igualmente entre duas categorias: Especie 1 e Especie 2.
+
+Prepare o banco de dados unificado executando o bloco abaixo:
+
+
+```{r}
+df_botanica <- data.frame(
+  dose = c(
+    74.9, 98.1, 89.3, 83.9, 66.2, 66.2, 62.3, 94.7, 84.0, 88.3, 60.8, 98.8, 93.3, 68.5, 67.3, 67.3, 72.2, 77.0, 77.3, 71.6, 65.6, 71.7, 89.7, 78.2, 85.6,
+    27.9, 43.5, 37.8, 31.8, 21.8, 22.1, 22.0, 47.3, 38.2, 40.5, 20.2, 49.6, 44.2, 23.4, 22.8, 22.8, 26.1, 29.5, 29.7, 25.5, 23.2, 25.7, 41.3, 31.9, 37.1
+  ),
+  altura = c(
+    59.8, 80.6, 74.3, 67.7, 48.4, 56.4, 54.7, 81.3, 66.4, 71.9, 43.6, 84.2, 73.0, 50.8, 57.5, 54.4, 59.5, 60.9, 57.0, 55.4, 50.7, 61.3, 64.9, 67.5, 68.0,
+    24.3, 32.5, 21.0, 26.5, 13.5, 14.5, 21.3, 36.3, 26.6, 31.6, 13.5, 40.9, 34.5, 14.2, 13.0, 13.2, 21.6, 22.1, 15.1, 18.2, 19.4, 18.0, 25.5, 21.6, 26.6
+  ),
+  especie = factor(rep(c("Especie 1", "Especie 2"), each = 25))
+)
+
+```
+
+13.0.1 Exercício 1 — Gráfico de Dispersão Customizado (Apenas Espécie 1)
+a) Faça o gráfico de dispersão de altura (y) versus dose (x) filtrando apenas para a Espécie 1.
+b) Atribua um título principal explicativo e altere os nomes dos eixos para incluir as unidades de medida (mg e cm).
+c) Adicione uma linha horizontal indicando a média da altura e uma linha vertical indicando a média da dose observada para essa espécie.
+d) Insira a reta de regressão linear estimada usando a geometria correta (method = "lm"). Remova a banda cinza de erro padrão.
+Modifique o visual aplicando o tema theme_classic().
+
+```{r}
+library(ggplot2)
+
+# Filtrar apenas a Espécie 1
+df_especie1 <- subset(df_botanica, especie == "Especie 1")
+
+# Calcular as médias
+media_altura <- mean(df_especie1$altura)
+media_dose <- mean(df_especie1$dose)
+
+# Gráfico
+ggplot(df_especie1, aes(x = dose, y = altura)) +
+  geom_point(color = "darkgreen", size = 3) +
+  
+  # Linha horizontal: média da altura
+  geom_hline(
+    yintercept = media_altura,
+    color = "red",
+    linetype = "dashed",
+    linewidth = 1
+  ) +
+  
+  # Linha vertical: média da dose
+  geom_vline(
+    xintercept = media_dose,
+    color = "blue",
+    linetype = "dashed",
+    linewidth = 1
+  ) +
+  
+  # Reta de regressão linear sem banda de erro
+  geom_smooth(
+    method = "lm",
+    se = FALSE,
+    color = "black",
+    linewidth = 1
+  ) +
+  
+  # Título e nomes dos eixos
+  labs(
+    title = "Relação entre Dose de Fertilizante e Altura Final — Espécie 1",
+    x = "Dose de fertilizante (mg)",
+    y = "Altura final da planta (cm)"
+  ) +
+  
+  # Tema clássico
+  theme_classic()
+```
+Exercício 2 — Mapeamento e Ajuste de Legendas
+a) Utilizando a tabela completa (df_botanica), crie um gráfico de dispersão mapeando a variável especie para a propriedade de cor (color) e formato (shape) simultaneamente dentro do aes().
+b) Aplique o tema theme_minimal().
+c) Usando a função theme(), mova a legenda do gráfico para a posição inferior ("bottom").
+d) Altere manualmente as cores dos grupos utilizando a função scale_color_manual(), escolhendo duas cores de sua preferência.
+
+```{r}
+library(ggplot2)
+
+ggplot(df_botanica, aes(
+  x = dose,
+  y = altura,
+  color = especie,
+  shape = especie
+)) +
+  geom_point(size = 3) +
+  
+  # Cores escolhidas manualmente
+  scale_color_manual(
+    values = c(
+      "Especie 1" = "darkgreen",
+      "Especie 2" = "purple"
+    )
+  ) +
+  
+  # Títulos dos eixos e da legenda
+  labs(
+    title = "Dose de Fertilizante versus Altura Final por Espécie",
+    x = "Dose de fertilizante (mg)",
+    y = "Altura final da planta (cm)",
+    color = "Espécie",
+    shape = "Espécie"
+  ) +
+  
+  # Tema minimalista e legenda na parte inferior
+  theme_minimal() +
+  theme(
+    legend.position = "bottom"
+  )
+```
+Exercício 3 — O Poder das Facetas
+a) Crie um gráfico de dispersão contendo a relação de altura por dose para toda a base.
+b) Utilize a função facet_wrap() para separar os gráficos das duas espécies em painéis dispostos lado a lado.
+c) Adicione a reta de regressão linear de forma que uma reta independente seja desenhada em cada painel automaticamente.
+d) Salve a imagem final com o nome "experimento_botanica_facetas.png".
+
+```{r}
+library(ggplot2)
+
+# Criar o gráfico
+grafico_facetas <- ggplot(
+  df_botanica,
+  aes(x = dose, y = altura)
+) +
+  geom_point(
+    color = "darkgreen",
+    size = 3
+  ) +
+  
+  # Um painel para cada espécie
+  facet_wrap(~ especie, nrow = 1) +
+  
+  # Reta de regressão independente em cada painel
+  geom_smooth(
+    method = "lm",
+    se = FALSE,
+    color = "red",
+    linewidth = 1
+  ) +
+  
+  labs(
+    title = "Relação entre Dose de Fertilizante e Altura Final",
+    x = "Dose de fertilizante (mg)",
+    y = "Altura final da planta (cm)"
+  ) +
+  
+  theme_classic()
+
+# Exibir o gráfico
+grafico_facetas
+
+# Salvar a imagem
+ggsave(
+  filename = "experimento_botanica_facetas.png",
+  plot = grafico_facetas,
+  width = 10,
+  height = 5,
+  dpi = 300
+)
+```
+
+Exercício 4 — Layouts Profissionais e Análise Marginal (ggExtra e patchwork)
+Utilizando os novos conceitos de organização de layouts complexos, resolva os desafios abaixo para a base df_botanica:
+
+a) Análise Marginal com ggExtra: Crie um gráfico de dispersão central de altura por dose. Mapeie a variável especie para a cor dos pontos. Em seguida, utilize a função ggMarginal() para adicionar histogramas marginais preenchidos nas bordas (tanto no topo quanto na direita), garantindo que as cores das barras sigam os grupos de espécies (groupFill = TRUE).
+```{r}
+
+install.packages("ggExtra")
+install.packages("patchwork")
+
+library(ggplot2)
+library(ggExtra)
+library(patchwork)
+
+# Gráfico de dispersão central
+grafico_dispersao <- ggplot(
+  df_botanica,
+  aes(x = dose, y = altura, color = especie)
+) +
+  geom_point(size = 3) +
+  labs(
+    title = "Dose de Fertilizante versus Altura da Planta",
+    x = "Dose de fertilizante (mg)",
+    y = "Altura final (cm)",
+    color = "Espécie"
+  ) +
+  theme_classic()
+
+# Adicionar histogramas marginais
+grafico_marginal <- ggMarginal(
+  grafico_dispersao,
+  type = "histogram",
+  fill = NULL,
+  groupFill = TRUE,
+  groupColour = TRUE
+)
+
+# Exibir o gráfico
+grafico_marginal
+```
+
+b) Combinação Avançada com patchwork: Crie dois gráficos separados para a variável altura:
+Um Boxplot horizontal da altura por espécie (ggplot(df_botanica, aes(x = altura, fill = especie)) + geom_boxplot()).
+Um Histograma geral da altura com 12 intervalos (bins = 12).
+```{r}
+boxplot_altura <- ggplot(
+  df_botanica,
+  aes(x = altura, fill = especie)
+) +
+  geom_boxplot() +
+  labs(
+    title = "Distribuição da Altura por Espécie",
+    x = "Altura final (cm)",
+    y = "Espécie",
+    fill = "Espécie"
+  ) +
+  theme_classic()
+```
+
+Histograma:
+
+```{r}
+histograma_altura <- ggplot(
+  df_botanica,
+  aes(x = altura)
+) +
+  geom_histogram(
+    bins = 12,
+    fill = "steelblue",
+    color = "white"
+  ) +
+  labs(
+    title = "Distribuição Geral da Altura",
+    x = "Altura final (cm)",
+    y = "Frequência"
+  ) +
+  theme_classic()
+```
+
+
+
+c) Montagem Final: Utilizando os operadores do pacote patchwork, empilhe verticalmente o Boxplot construído sobre o Histograma, configurando o layout para que o Boxplot ocupe 25% da altura total da imagem e o histograma ocupe os 75% restantes. Salve o resultado final com o nome "layout_distribuicao_plantas.png".
+
+
+```{r}
+# Montagem vertical
+layout_final <- boxplot_altura / histograma_altura +
+  plot_layout(heights = c(1, 3))
+
+# Exibir o layout
+layout_final
+
+# Salvar a imagem final
+ggsave(
+  filename = "layout_distribuicao_plantas.png",
+  plot = layout_final,
+  width = 10,
+  height = 8,
+  dpi = 300
+)
+```
+
+
+
+
