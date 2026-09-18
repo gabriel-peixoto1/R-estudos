@@ -1,0 +1,149 @@
+---
+title: "Familia Apply"
+output: html_notebook
+---
+Exercicios Praticos
+
+Os estudantes devem resolver as questoes abaixo preenchendo os espacos em branco de codigo sem utilizar estruturas de loop tradicionais (como ‘for’ ou ‘while’).
+
+============================= # ======================================== # =============================
+
+Exercicio 1 (Uso da funcao apply)
+
+Utilizando o conjunto de dados nativo ‘mtcars’, filtre apenas as colunas numericas de rendimento e potencia (‘mpg’, ‘hp’, ‘wt’). Calcule o valor maximo registrado para cada uma dessas colunas.
+
+```{r}
+# Selecionando as colunas mpg, hp e wt
+dados <- mtcars[, c("mpg", "hp", "wt")]
+
+# Calculando o valor máximo de cada coluna
+resultado <- apply(dados, 2, max)
+
+# Exibindo o resultado
+resultado
+
+```
+
+
+Exercicio 2 (Uso da funcao lapply)
+
+Crie uma lista contendo tres vetores numericos quaisquer de tamanhos variados. Use a funcao lapply para extrair a raiz quadrada de cada um dos numeros contidos em todos os elementos da lista.
+
+```{r}
+
+# Criando uma lista com três vetores numéricos
+lista <- list(
+  c(4, 9, 16),
+  c(25, 36),
+  c(49, 64, 81, 100)
+)
+
+# Calculando a raiz quadrada de todos os elementos
+resultado <- lapply(lista, sqrt)
+
+# Exibindo o resultado
+resultado
+
+```
+
+
+Exercicio 3 (Uso da funcao sapply)
+
+Utilizando a mesma lista criada no Exercicio 2, utilize a funcao sapply associada a uma funcao anonima para capturar exclusivamente o primeiro elemento localizado em cada um dos vetores.
+
+```{r}
+
+# Utilizando a lista criada no Exercício 2
+lista <- list(
+  c(4, 9, 16),
+  c(25, 36),
+  c(49, 64, 81, 100)
+)
+
+# Extraindo o primeiro elemento de cada vetor
+resultado <- sapply(lista, function(x) x[1])
+
+# Exibindo o resultado
+resultado
+
+```
+
+
+Exercicio 4 (Uso da funcao tapply)
+
+Utilizando o banco de dados nativo do R denominado ‘iris’, utilize a funcao tapply para extrair o desvio padrao (funcao ‘sd’) da variavel ‘Petal.Length’ agrupada de acordo com as categorias de especies contidas na variavel ‘Species’.
+
+```{r}
+
+# Calculando o desvio padrão de Petal.Length
+# para cada espécie
+resultado <- tapply(
+  iris$Petal.Length,
+  iris$Species,
+  sd
+)
+
+# Exibindo o resultado
+resultado
+
+
+```
+
+
+Exercicio 5
+
+1. Construa uma função com argumentos n, mean e sigma, que simule uma amostra de tamanho n de uma uma distribuição normal com média mean e desvio padrão sd, calule sua média e a distância entre esse valor e o valor de mean.
+2. Para mean = 50 e sd = 10, replique o uso dessa função 1000 vezes.
+3. Calcule a média e o desvio padrão e construa o histograma para os valores gerados no item acima.
+
+```{r}
+
+# Criando a função
+simula <- function(n, mean, sigma) {
+  
+  # Gerando uma amostra da distribuição normal
+  amostra <- rnorm(n, mean = mean, sd = sigma)
+  
+  # Calculando a média da amostra
+  media_amostra <- mean(amostra)
+  
+  # Calculando a distância entre a média amostral e a média informada
+  distancia <- abs(media_amostra - mean)
+  
+  # Retornando a distância
+  return(distancia)
+}
+
+
+# Repetindo a simulação 1000 vezes
+# Aqui foi utilizado n = 100, mean = 50 e sigma = 10
+resultados <- replicate(
+  1000,
+  simula(100, 50, 10)
+)
+
+
+# Calculando a média dos resultados
+media_resultados <- mean(resultados)
+
+# Calculando o desvio padrão dos resultados
+desvio_padrao_resultados <- sd(resultados)
+
+# Exibindo a média
+media_resultados
+
+# Exibindo o desvio padrão
+desvio_padrao_resultados
+
+
+# Construindo o histograma
+hist(
+  resultados,
+  main = "Distribuição das Distâncias",
+  xlab = "Distância entre a média amostral e a média populacional",
+  ylab = "Frequência"
+)
+
+
+```
+
